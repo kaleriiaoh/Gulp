@@ -1,0 +1,10 @@
+@import "color";
+@import "mixins";
+@import "fonts";
+
+body{
+  color: $maincolor;
+  background: blueviolet;
+  font-family: "appetite-italic";
+  font-size: 100px;
+}
