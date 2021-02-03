@@ -125,6 +125,12 @@ gulp.task('scripts', () => {
       .pipe(browserSync.stream());
 });
 
+//Таск для копирования ХТМЛ
+gulp.task('copy', () => {
+   return gulp.src('./src/index.html')
+       .pipe(gulp.dest('./dist'))
+});
+
 //Таск для очистки папки dist
 gulp.task('del', () => {
    return del(['dist/*'])
@@ -145,7 +151,7 @@ gulp.task('img-compress', ()=> {
 gulp.task('watch', () => {
    browserSync.init({
       server: {
-         baseDir: "./"
+         baseDir: "./dist"
       }
    });
    //Следить за добавлением новых изображений
@@ -154,12 +160,12 @@ gulp.task('watch', () => {
    gulp.watch('./src/scss/**/*.scss', gulp.series('styles'))
    //Следить за JS файлами
    gulp.watch('./src/js/**/*.js', gulp.series('scripts'))
-   //При изменении HTML запустить синхронизацию
-   gulp.watch("./*.html").on('change', browserSync.reload)
    //Следить за шрифтами
    gulp.watch('./src/fonts/**.ttf',gulp.series('fonts'))
    gulp.watch('./src/fonts/**.ttf',gulp.series('fontsStyle'));
+   //Следить за хтмл(копирование)
+   gulp.watch('./src/index.html',gulp.series('copy')).on('change', browserSync.reload);
 });
 
 //Таск по умолчанию, Запускает del, styles, scripts, img-compress и watch
-gulp.task('default', gulp.series('del', gulp.parallel('styles', 'scripts', 'img-compress'), 'fonts', 'fontsStyle', 'watch'));
+gulp.task('default', gulp.series('del', gulp.parallel('styles', 'scripts','copy', 'img-compress'), 'fonts', 'fontsStyle', 'watch'));
